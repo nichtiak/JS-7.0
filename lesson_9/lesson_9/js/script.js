@@ -99,33 +99,35 @@ window.addEventListener('DOMContentLoaded', function () {
 		close = document.querySelector('.popup-close'),
 		descriptionBtn = document.querySelectorAll('.description-btn');
 
-	function modal(){
-		for (let i = 0; i < descriptionBtn.length; i++){
-			descriptionBtn[i].addEventListener('click', function () {
+	function modal(target) {
+		for (let i = 0; i < descriptionBtn.length; i++) {
+			target[i].addEventListener('click', function () {
 				overlay.style.display = 'block';
 				this.classList.add('more-splash');
 				document.body.style.overflow = 'hidden';
 			});
-		
+
+			more.addEventListener('click', function () {
+				overlay.style.display = 'block';
+				this.classList.add('more-splash');
+				document.body.style.overflow = 'hidden';
+			});
+
 			close.addEventListener('click', function () {
 				overlay.style.display = 'none';
-				// more.classList.remove('more-splash');
+				more.classList.remove('more-splash');
 				document.body.style.overflow = '';
 			})
 		};
 	};
-	modal();
-	
+	modal(descriptionBtn);
 
-	more.addEventListener('click', function () {
-		overlay.style.display = 'block';
-		this.classList.add('more-splash');
-		document.body.style.overflow = 'hidden';
-	});
 
-	close.addEventListener('click', function () {
-		overlay.style.display = 'none';
-		more.classList.remove('more-splash');
-		document.body.style.overflow = '';
-	})
+
+
+	// close.addEventListener('click', function () {
+	// 	overlay.style.display = 'none';
+	// 	more.classList.remove('more-splash');
+	// 	document.body.style.overflow = '';
+	// });
 });
