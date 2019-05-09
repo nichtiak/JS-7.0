@@ -129,7 +129,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		success: 'Спасибо! Скоро мы с вами свяжимся!',
 		failure: 'Что-то пошло не так...'
 	},
-	 	form = document.querySelector('.main-form'),
+		form = document.querySelector('.main-form'),
 		input = form.getElementsByTagName('input'),
 		statusMessage = document.createElement('div'),
 
@@ -137,62 +137,62 @@ window.addEventListener('DOMContentLoaded', function () {
 		inputs = forma.getElementsByTagName('input'),
 		input1 = forma.getElementsByTagName('input')[0],
 		input2 = forma.getElementsByTagName('input')[1];
-		
-			// str = /\+{1}\d{1,11}/;
 
-			input1.name = 'email';
-			input2.name = 'phone';
+	// str = /\+{1}\d{1,11}/;
 
-			input2.onkeypress = function(e) {    //отмена ввода букв
+	input1.name = 'email';
+	input2.name = 'phone';
 
-				e = e || event;
-	
-				if (e.ctrlKey || e.altKey || e.metaKey) return;
-	
-				let chr = getChar(e);
-	
-				// с null надо осторожно в неравенствах, т.к. например null >= '0' => true!
-				// на всякий случай лучше вынести проверку chr == null отдельно
-				if (chr == '+' || (chr == null)) return;
-	
-				if (chr < '0' || chr > '9') {
-					return false;
-				}
-	
-			};
+	input2.onkeypress = function (e) {    //отмена ввода букв
 
-			input[0].onkeypress = function(e) {
+		e = e || event;
 
-				e = e || event;
-	
-				if (e.ctrlKey || e.altKey || e.metaKey) return;
-	
-				let chr = getChar(e);
-	
-				// с null надо осторожно в неравенствах, т.к. например null >= '0' => true!
-				// на всякий случай лучше вынести проверку chr == null отдельно
-				if (chr == '+' || (chr == null)) return;
-	
-				if (chr < '0' || chr > '9') {
-					return false;
-				}
-	
-			};
-	
-			function getChar(event) {
-				if (event.which == null) {
-					if (event.keyCode < 32) return null;
-					return String.fromCharCode(event.keyCode) // IE
-				}
-	
-				if (event.which != 0 && event.charCode != 0) {
-					if (event.which < 32) return null;
-					return String.fromCharCode(event.which) // остальные
-				}
-	
-				return null; // специальная клавиша
-			};
-		
+		if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+		let chr = getChar(e);
+
+		// с null надо осторожно в неравенствах, т.к. например null >= '0' => true!
+		// на всякий случай лучше вынести проверку chr == null отдельно
+		if (chr == '+' || (chr == null)) return;
+
+		if (chr < '0' || chr > '9') {
+			return false;
+		}
+
+	};
+
+	input[0].onkeypress = function (e) {
+
+		e = e || event;
+
+		if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+		let chr = getChar(e);
+
+		// с null надо осторожно в неравенствах, т.к. например null >= '0' => true!
+		// на всякий случай лучше вынести проверку chr == null отдельно
+		if (chr == '+' || (chr == null)) return;
+
+		if (chr < '0' || chr > '9') {
+			return false;
+		}
+
+	};
+
+	function getChar(event) {
+		if (event.which == null) {
+			if (event.keyCode < 32) return null;
+			return String.fromCharCode(event.keyCode) // IE
+		}
+
+		if (event.which != 0 && event.charCode != 0) {
+			if (event.which < 32) return null;
+			return String.fromCharCode(event.which) // остальные
+		}
+
+		return null; // специальная клавиша
+	};
+
 
 	statusMessage.classList.add('status');
 
@@ -268,62 +268,91 @@ window.addEventListener('DOMContentLoaded', function () {
 
 	// Отправка промисами
 
-	function sendForm(elem){
-		elem.addEventListener('submit', function(e){
-			e.proventDefault();
-				elem.appendChild(statusMessage);
-				let formData = new FormData(elem),
-					formaData = new FormData(elem);
+	function sendForm(elem) {
+		elem.addEventListener('submit', function (e) {
+			e.preventDefault();
+			elem.appendChild(statusMessage);
+			let formData = new FormData(elem),
+				formaData = new FormData(elem);
 
-				function postData(data){
+			// 	obj = {};
 
-					return new Promise(function(resolve, reject){
-						let request = new XMLHttpRequest();
+			// formData.forEach(function (value, key) {
+			// 	obj[key] = value;
+			// });
 
-						request.open('POST', 'server.php');
+			// let json = JSON.stringify(obj);
 
-						request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-						request.onreadystatechange = function(){
-							if (request.readyState < 4) {
+
+			function postData(data) {
+
+				return new Promise(function (resolve, reject) {
+					let request = new XMLHttpRequest();
+
+					request.open('POST', 'server.php');
+
+					request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+					// request.send(json);
+
+					request.onreadystatechange = function () {
+						if (request.readyState < 4) {
+							resolve()
+						} else if (request.readyState === 4) {
+							if (request.status == 200 && request.status < 300) {
 								resolve()
-							} else if (request.readyState === 4) {
-								if (request.status == 200 && request.status < 300) {
-									resolve()
-								} else {
-									reject()
-								}
+							} else {
+								reject()
 							}
-						};
-						request.send(data);
+						}
+					};
+
+
+
+					let obj = {};
+
+					formData.forEach(function (value, key) {
+						obj[key] = value;
 					});
-				} //end postData
 
-				function clearInput(){
-					for (let i = 0; i < input.length; i++){
-						input[i].value = '';
-					}
+					let json = JSON.stringify(obj);
+
+					request.send(json);
+				});
+			} //end postData
+
+			function clearInput() {
+				for (let i = 0; i < input.length; i++) {
+					input[i].value = '';
 				}
+			}
 
-				postData(formData)
-					.then(()=> statusMessage.innerHTML = message.loading)
-					.then(()=> {
-						thanksModal.style.display = 'block';
-						mainModal.style.display = 'none';
-						statusMessage.innerHTML = '';
-					})
-					.catch(()=> statusMessage.innerHTML = message.failure)
-					.then(clearInput);
+			function clearInputs() {
+				for (let i = 0; i < inputs.length; i++) {
+					inputs[i].value = '';
+				}
+			}
 
-				postData(formaData)
-					.then(()=> statusMessage.innerHTML = message.loading)
-					.then(()=> {
-						thanksModal.style.display = 'block';
-						mainModal.style.display = 'none';
-						statusMessage.innerHTML = '';
-					})
-					.catch(()=> statusMessage.innerHTML = message.failure)
-					.then(clearInput);
+			postData(formData)
+				.then(() => statusMessage.innerHTML = message.loading)
+				.then(() => {
+					thanksModal.style.display = 'block';
+					mainModal.style.display = 'none';
+					statusMessage.innerHTML = '';
+				})
+				.catch(() => statusMessage.innerHTML = message.failure)
+				.then(clearInput);
+
+			postData(formaData)
+				.then(() => statusMessage.innerHTML = message.loading)
+				.then(() => {
+					thanksModal.style.display = 'block';
+					mainModal.style.display = 'none';
+					statusMessage.innerHTML = '';
+				})
+				.catch(() => statusMessage.innerHTML = message.failure)
+				.then(clearInputs);
 		});
 	}
 	sendForm(form);
