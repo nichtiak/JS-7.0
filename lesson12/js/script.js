@@ -272,8 +272,8 @@ window.addEventListener('DOMContentLoaded', function () {
 		elem.addEventListener('submit', function (e) {
 			e.preventDefault();
 			elem.appendChild(statusMessage);
-			let formData = new FormData(elem),
-				formaData = new FormData(elem);
+			let formData = new FormData(elem);
+				// formaData = new FormData(elem);
 
 			// 	obj = {};
 
@@ -336,23 +336,20 @@ window.addEventListener('DOMContentLoaded', function () {
 
 			postData(formData)
 				.then(() => statusMessage.innerHTML = message.loading)
-				.then(() => {
-					thanksModal.style.display = 'block';
-					mainModal.style.display = 'none';
-					statusMessage.innerHTML = '';
-				})
+				.then(() => statusMessage.innerHTML = message.success)
 				.catch(() => statusMessage.innerHTML = message.failure)
-				.then(clearInput);
-
-			postData(formaData)
-				.then(() => statusMessage.innerHTML = message.loading)
-				.then(() => {
-					thanksModal.style.display = 'block';
-					mainModal.style.display = 'none';
-					statusMessage.innerHTML = '';
-				})
-				.catch(() => statusMessage.innerHTML = message.failure)
+				.then(clearInput)
 				.then(clearInputs);
+
+			// postData(formaData)
+			// 	.then(() => statusMessage.innerHTML = message.loading)
+			// 	.then(() => {
+			// 		thanksModal.style.display = 'block';
+			// 		mainModal.style.display = 'none';
+			// 		statusMessage.innerHTML = '';
+			// 	})
+			// 	.catch(() => statusMessage.innerHTML = message.failure)
+			// 	.then(clearInputs);
 		});
 	}
 	sendForm(form);
