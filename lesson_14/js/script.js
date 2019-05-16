@@ -3,10 +3,17 @@ $(document).ready(function(){
         $('.overlay').fadeIn('slow');
         $('.modal'). slideDown(1000);
     });
-    $('.text-center').on('click', function(){
+
+    $('.main_btna').on('click', function(){
         $('.overlay').fadeIn('slow');
         $('.modal'). slideDown(1000);
     });
+
+    $('.main_btn').on('click', function(){
+        $('.overlay').fadeIn('slow');
+        $('.modal'). slideDown(1000);
+    });
+
     $('.close').on('click', function(){
         $('.modal'). slideUp(1000);
         $('.overlay').fadeOut('slow');
